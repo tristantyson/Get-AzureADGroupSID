@@ -1,6 +1,5 @@
 # Get-AzureADGroupSID
-
-PowerShell script which returns the security identifier (SID) of the requested Azure Active Directory group.
+A simple PowerShell script which returns the security identifier (SID) of the requested Azure Active Directory group.
 
 ## Script requirements
 
