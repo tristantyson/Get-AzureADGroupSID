@@ -18,4 +18,4 @@ Download and run the `Get-AzureADGroupSID.ps1` script with the `-groupName`param
 ## User Experience
 
 Console Output:
-![Alt text](https://github.com/tristantyson/Get-AzureADGroupSID/blob/main/media/UserExperience.gif "PowerShell Output")
+![UserExperience.gif](https://github.com/tristantyson/Get-AzureADGroupSID/blob/master/Media/UserExperience.gif)
