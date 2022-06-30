@@ -16,6 +16,7 @@ Download and run the `Get-AzureADGroupSID.ps1` script with the `-groupName`param
 ```
 
 ## User Experience
-
-Console Output:
 ![UserExperience.gif](https://github.com/tristantyson/Get-AzureADGroupSID/blob/master/Media/UserExperience.gif)
+
+## Acknowledgements
+The function which converts the objectID to the SID was created by [Oliver Kieselbach](https://oliverkieselbach.com/2020/05/13/powershell-helpers-to-convert-azure-ad-object-ids-and-sids/).
