@@ -17,7 +17,7 @@ try {
     # Import and insall the AzureAD module if youve not used it before
     $module = Import-Module AzureAD -PassThru -ErrorAction Ignore
     if (-not $module) {
-        Write-Host "Installing module AzureAD"
+        Write-Verbose "Installing module AzureAD"
         Install-Module AzureAD -Force
     }
 
