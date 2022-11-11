@@ -8,7 +8,7 @@ A simple PowerShell script which returns the security identifier (SID) of the re
 
 ## How to run the script
 
-Download and run the `Get-AzureADGroupSID.ps1` script with the `-groupName`parameter followed by the name of the group.
+Download and run the `Get-AzureADGroupSID.ps1` script with the `-groupName` parameter followed by the name of the group.
 
 ```powershell
 .\get-azureadgroupsid.ps1 -groupName "GROUP NAME"
