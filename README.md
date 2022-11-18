@@ -7,8 +7,13 @@ A simple PowerShell script which returns the security identifier (SID) of the re
 - Local administrator rights to install the AzueAD module.
 
 ## How to run the script
+Install the script from the PowerShell Gallery.
 
-Download and run the `Get-AzureADGroupSID.ps1` script with the `-groupName`parameter followed by the name of the group.
+```powershell
+Install-Script -Name get-azureadgroupsid
+```
+
+Run `Get-AzureADGroupSID.ps1` with the `-groupName` parameter followed by the name of the group.
 
 ```powershell
 .\get-azureadgroupsid.ps1 -groupName "GROUP NAME"

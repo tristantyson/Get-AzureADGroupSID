@@ -1,15 +1,27 @@
-﻿<#
-.SYNOPSIS
-Gets the SID of an AzureAD group based on the name.
- 
-.DESCRIPTION
-Retrieves the ObjectID of the requested Azure AD group and converts it to the SID.
-Author: Tristan Tyson (tech.tristantyson.com).
+﻿<#PSScriptInfo
+.TITLE Get-AzureADGroupSID.ps1
 
-.PARAMETER groupName
-The name of the AzureAD group you want to query.
+.VERSION 1.3
+
+.GUID 4da60fad-3ad2-47f3-a26d-7dcbe0b8988d
+
+.AUTHOR Tristan Tyson (tech.tristantyson.com)
+
+.TAGS AzureAD AzureAD-Group-SID
+
+.RELEASENOTES
+    11/18/22 - Initial release to PSGallery
+
 #>
 
+<#
+.DESCRIPTION
+
+    Retrieves the ObjectID of the requested Azure AD group and converts it to the SID.
+
+.PARAMETER groupName
+    The name of the AzureAD group you want to query.
+#>
 Param(
     [Parameter(Mandatory = $true, ValueFromPipeline = $true)] [string[]] $groupName
 )
@@ -23,7 +35,7 @@ try {
 
     # Connect to your Azure tenant
     $aadId = Connect-AzureAD -ErrorAction Stop
-    Write-Verbose "Connected to Azure AD tenant $($aadId.TenantId)" 
+    Write-Verbose "Connected to Azure AD tenant $($aadId.TenantId)"
 
     # Get the group ObjectID
     $groupObject = Get-AzureADGroup -Filter "DisplayName eq '$groupName'" -ErrorAction Stop
