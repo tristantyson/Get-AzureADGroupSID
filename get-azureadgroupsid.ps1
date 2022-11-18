@@ -1,5 +1,4 @@
 ﻿<#PSScriptInfo
-.TITLE Get-AzureADGroupSID.ps1
 
 .VERSION 1.3
 
