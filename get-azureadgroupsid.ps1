@@ -23,43 +23,47 @@
 #>
 Param(
     [Parameter(Mandatory = $true, ValueFromPipeline = $true)] [string[]] $groupName
-)
-try {
-    # Import and insall the AzureAD module if youve not used it before
-    $module = Import-Module AzureAD -PassThru -ErrorAction Ignore
-    if (-not $module) {
-        Write-Verbose "Installing module AzureAD"
-        Install-Module AzureAD -Force
-    }
-
-    # Connect to your Azure tenant
-    $aadId = Connect-AzureAD -ErrorAction Stop
-    Write-Verbose "Connected to Azure AD tenant $($aadId.TenantId)"
-
-    # Get the group ObjectID
-    $groupObject = Get-AzureADGroup -Filter "DisplayName eq '$groupName'" -ErrorAction Stop
-    $ObjectId = $groupObject.objectid
-    Write-Verbose "Retrieving ObjectID"
-
-    if ($ObjectId) {
-        # Convert the ObjectID to SID
-        Write-Verbose "Converting ObjectID to SID"
-        $bytes = [Guid]::Parse($ObjectId).ToByteArray()
-        $array = New-Object 'UInt32[]' 4
-        [Buffer]::BlockCopy($bytes, 0, $array, 0, 16)
-        $sid = "S-1-12-1-$array".Replace(' ', '-')
-    }
-    else {
-        throw "Unable to find group: $groupName"
-    }
-    # Create Object
-    $azureADGroupSID = [PSCustomObject]@{
-        Name     = $groupObject.DisplayName
-        sid      = $sid
-        ObjectID = $ObjectId
-    }
-    $azureADGroupSID.sid
+)      
+       
+# Get NuGet
+$provider = Get-PackageProvider NuGet -ErrorAction Ignore
+if (-not $provider) {
+    Write-Host "Installing provider NuGet..."
+    Find-PackageProvider -Name NuGet -ForceBootstrap -IncludeDependencies
 }
-catch {
-    throw $_
+
+$authModule = get-installedmodule -name Microsoft.Graph.Authentication -ErrorAction Ignore
+if (-not $authmodule) {
+    Write-Host "Installing Microsoft Graph Module..."
+    Install-Module Microsoft.Graph.Authentication -Force
 }
+
+
+        
+# Connect to Graph
+$graph = Connect-MgGraph -scope 'Group.Read.All' 
+Write-Host "Connected to Microsoft Graph$($graph.TenantId)"
+
+# Get AzureAD Group Object
+$groupInfo = Get-MgGroup -Filter "DisplayName eq '$groupName'"
+$groupObjectID = $groupInfo.Id
+
+if ($groupObjectID) {
+    # Convert the ObjectID to SID
+    Write-Verbose "Converting ObjectID to SID"
+    $bytes = [Guid]::Parse($groupObjectID).ToByteArray()
+    $array = New-Object 'UInt32[]' 4
+    [Buffer]::BlockCopy($bytes, 0, $array, 0, 16)
+    $sid = "S-1-12-1-$array".Replace(' ', '-')
+}
+else {
+    throw "Unable to find group: $groupName"
+}
+
+# Create Object
+$azureADGroupSID = [PSCustomObject]@{
+    Name     = $groupObject.DisplayName
+    sid      = $sid
+    ObjectID = $ObjectId
+}
+$azureADGroupSID.sid
