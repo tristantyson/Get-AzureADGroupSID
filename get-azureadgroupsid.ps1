@@ -29,32 +29,32 @@ try {
     # Get NuGet provider
     $provider = Get-PackageProvider NuGet -ErrorAction Ignore
     if (-not $provider) {
-        Write-Host "Installing provider NuGet..."
+        Write-Verbose "Installing provider NuGet..."
         Find-PackageProvider -Name NuGet -ForceBootstrap -IncludeDependencies
     }
 
     # Install Microsoft Graph Authentication Module
     $authModule = get-installedmodule -name Microsoft.Graph.Authentication -ErrorAction Ignore
     if (-not $authmodule) {
-        Write-Host "Installing Microsoft Graph Module..."
+        Write-Verbose "Installing Microsoft Graph Authentication Module..."
         Install-Module Microsoft.Graph.Authentication -Force
     }
 
     # Install Microsoft Graph Groups Module
     $groupModule = get-installedmodule -name Microsoft.Graph.Groups -ErrorAction Ignore
     if (-not $groupModule) {
-        Write-Host "Installing Microsoft Graph Module..."
+        Write-Verbose "Installing Microsoft Graph Groups Module..."
         Install-Module Microsoft.Graph.Groups -Force
     }
 
     # Connect to Graph
     $graph = Connect-MgGraph -scope 'Group.Read.All' 
-    Write-Host "Connected to Microsoft Graph$($graph.TenantId)"
+    Write-Verbose "Connected to Microsoft Graph$($graph.TenantId)"
 
     # Get AzureAD Group Object
     $groupInfo = Get-MgGroup -Filter "DisplayName eq '$groupName'"
     $groupObjectID = $groupInfo.Id
-    
+
     # Convert the ObjectID to SID
     if ($groupObjectID) {
         Write-Verbose "Converting ObjectID to SID"
@@ -68,9 +68,9 @@ try {
     }
     # Create Object
     $azureADGroupSID = [PSCustomObject]@{
-        Name     = $groupObject.DisplayName
-        sid      = $sid
-        ObjectID = $ObjectId
+        Name     = $groupInfo.DisplayName
+        SID      = $sid
+        ObjectID = $groupInfo.Id
     }
     $azureADGroupSID.sid
 }
